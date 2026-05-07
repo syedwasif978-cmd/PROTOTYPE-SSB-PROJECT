@@ -224,27 +224,69 @@ export default function ChatPage() {
               <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#f7f9fb]">
                 <div className="w-20 h-20 rounded-2xl bg-[#005931]/10 flex items-center justify-center mb-5">
                   <span className="material-symbols-outlined text-[#005931]" style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}>
-                    folder_open
+                    dataset
                   </span>
                 </div>
-                <h2 className="text-[18px] font-semibold text-[#191c1e] mb-2">No workbook opened</h2>
-                <p className="text-[13px] text-[#6f7a70] text-center max-w-sm mb-6 leading-relaxed">
-                  Open an Excel file to get started. Codex will read and display your spreadsheet here, ready for AI-powered analysis.
+                <h2 className="text-[18px] font-semibold text-[#191c1e] mb-1">Get Started</h2>
+                <p className="text-[13px] text-[#6f7a70] text-center max-w-md mb-7 leading-relaxed">
+                  Choose how you&apos;d like to bring data into Codex. Your spreadsheet will appear here once loaded.
                 </p>
-                <div className="flex gap-3">
+
+                <div className="grid grid-cols-2 gap-3 w-full max-w-lg">
+                  {/* 1. Upload Document */}
                   <button
                     onClick={handleFileOpen}
-                    className="flex items-center gap-2 px-5 py-3 rounded-xl bg-[#005931] text-white font-semibold text-[13px] hover:bg-[#176c40] transition-all shadow-md hover:shadow-lg"
+                    className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[#bfc9be] hover:border-[#005931] hover:shadow-md transition-all text-left group"
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>upload_file</span>
-                    Open File
+                    <div className="w-10 h-10 min-w-[40px] rounded-lg bg-[#005931]/10 flex items-center justify-center group-hover:bg-[#005931]/15 transition-colors">
+                      <span className="material-symbols-outlined text-[#005931]" style={{ fontSize: 22 }}>upload_file</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#191c1e]">Upload Document</p>
+                      <p className="text-[11px] text-[#6f7a70] mt-0.5 leading-relaxed">Upload an .xlsx, .xls, or .csv file directly</p>
+                    </div>
                   </button>
+
+                  {/* 2. Browse Folder */}
                   <button
                     onClick={handleFileOpen}
-                    className="flex items-center gap-2 px-5 py-3 rounded-xl border border-[#bfc9be] text-[#3f4941] font-semibold text-[13px] hover:bg-[#eceef0] transition-colors"
+                    className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[#bfc9be] hover:border-[#005931] hover:shadow-md transition-all text-left group"
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: 18 }}>folder</span>
-                    Browse Directory
+                    <div className="w-10 h-10 min-w-[40px] rounded-lg bg-[#0b61a1]/10 flex items-center justify-center group-hover:bg-[#0b61a1]/15 transition-colors">
+                      <span className="material-symbols-outlined text-[#0b61a1]" style={{ fontSize: 22 }}>folder_open</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#191c1e]">Browse Folder</p>
+                      <p className="text-[11px] text-[#6f7a70] mt-0.5 leading-relaxed">Select a folder and pick files from your device</p>
+                    </div>
+                  </button>
+
+                  {/* 3. Describe Data */}
+                  <button
+                    onClick={handleFileOpen}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[#bfc9be] hover:border-[#005931] hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="w-10 h-10 min-w-[40px] rounded-lg bg-[#404e62]/10 flex items-center justify-center group-hover:bg-[#404e62]/15 transition-colors">
+                      <span className="material-symbols-outlined text-[#404e62]" style={{ fontSize: 22 }}>edit_note</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#191c1e]">Describe Data</p>
+                      <p className="text-[11px] text-[#6f7a70] mt-0.5 leading-relaxed">Type or describe the table you need in the chat</p>
+                    </div>
+                  </button>
+
+                  {/* 4. Scrape from URL */}
+                  <button
+                    onClick={handleFileOpen}
+                    className="flex items-start gap-3 p-4 rounded-xl bg-white border border-[#bfc9be] hover:border-[#005931] hover:shadow-md transition-all text-left group"
+                  >
+                    <div className="w-10 h-10 min-w-[40px] rounded-lg bg-[#7c5800]/10 flex items-center justify-center group-hover:bg-[#7c5800]/15 transition-colors">
+                      <span className="material-symbols-outlined text-[#7c5800]" style={{ fontSize: 22 }}>language</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#191c1e]">Scrape from URL</p>
+                      <p className="text-[11px] text-[#6f7a70] mt-0.5 leading-relaxed">Paste a website link to extract tables and data</p>
+                    </div>
                   </button>
                 </div>
               </div>
