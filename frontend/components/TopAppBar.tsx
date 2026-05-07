@@ -20,6 +20,7 @@ export default function TopAppBar() {
           className="ml-sm w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden cursor-pointer"
           title="User Avatar"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="User Avatar"
             className="w-full h-full object-cover"

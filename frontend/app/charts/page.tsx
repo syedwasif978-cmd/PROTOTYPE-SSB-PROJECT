@@ -33,6 +33,7 @@ export default function ChartsPage() {
               </div>
               <div className="flex-1 p-lg bg-surface-container-lowest flex items-center justify-center relative">
                 <div className="w-full h-full max-w-4xl relative rounded-lg border border-outline border-dashed p-sm flex items-center justify-center bg-surface-container-low">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     className="absolute inset-0 w-full h-full object-cover rounded shadow-sm opacity-90 mix-blend-multiply"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOlO5gSDG5gac1HL5exNyqO4fhYTSX9I03gsCl9eyT0wEjMpClRrMIF6H1Z_ck2TTkQoGo9-W3hL03KkfG7FQ-cXP8btpOyiU-hwK4jsumycp9Ia7kGlHfvtD9VAtyb9Tf4tEUNzQYDbjPkhW2ZnGogeZ4V0W3YCulM8u24-pjteTwkiOzyTU4B74NjVrXdkihfjJr40jECuJDIfn6kYDbRYPHgvhYeyKBmEIFUyLx9-CecXvgTOrnjdoNCTRSUA-hMRwK-QzYmqKi"
@@ -57,7 +58,7 @@ export default function ChartsPage() {
                   Smart Recommendations
                 </h3>
                 <p className="font-body-sm text-body-sm text-on-surface-variant mt-xs">
-                  Based on your data's time-series nature, a{" "}
+                  Based on your data&apos;s time-series nature, a{" "}
                   <strong className="text-on-surface">Line Chart</strong> might
                   show regional sales trends more clearly over the fiscal
                   quarters.

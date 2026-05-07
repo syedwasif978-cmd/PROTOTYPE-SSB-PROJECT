@@ -20,7 +20,7 @@ export default function LogicAuditorPage() {
                 Proposed Logic: Revenue Aggregation
               </h2>
               <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Review the generated steps before applying to 'Sales_Data.xlsx'
+                Review the generated steps before applying to &apos;Sales_Data.xlsx&apos;
               </p>
             </div>
             <button className="bg-primary hover:bg-surface-tint text-on-primary font-body-md text-body-md px-md py-sm rounded shadow-sm transition-colors flex items-center space-x-xs">
