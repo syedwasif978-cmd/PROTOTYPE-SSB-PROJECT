@@ -1,140 +1,231 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import TopAppBar from "@/components/TopAppBar";
 
+interface Message {
+  id: string;
+  role: "user" | "ai";
+  text: string;
+  timestamp: string;
+  attachment?: { type: "image" | "url" | "range"; name: string };
+  actionCard?: { title: string; subtitle: string; icon: string };
+  actions?: { label: string; primary?: boolean }[];
+}
+
+const initialMessages: Message[] = [
+  {
+    id: "1",
+    role: "ai",
+    text: "Welcome! I can help you extract data from images, URLs, or text and build Excel tables. Upload a file or describe the data you need.",
+    timestamp: "Now",
+    actionCard: {
+      title: "Quick Start",
+      subtitle: "Upload an image, paste a URL, or describe your data",
+      icon: "rocket_launch",
+    },
+    actions: [
+      { label: "Upload Image", primary: true },
+      { label: "Paste URL" },
+    ],
+  },
+];
+
+function getTimeString() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 export default function ChatPage() {
-  const [messages, setMessages] = useState<
-    Array<{ id: string; role: string; text: string }>
-  >([
-    {
-      id: "1",
-      role: "ai",
-      text: "I've identified a table in this image. Would you like to preview the extraction?"
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [input, setInput] = useState("");
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages]);
 
   const handleSend = () => {
-    if (input.trim()) {
-      const newMessage = {
-        id: Date.now().toString(),
-        role: "user",
-        text: input
-      };
-      setMessages([...messages, newMessage]);
-      setInput("");
+    if (!input.trim()) return;
 
-      setTimeout(() => {
-        const aiResponse = {
-          id: (Date.now() + 1).toString(),
-          role: "ai",
-          text: "Processing your request... This is a demo response."
-        };
-        setMessages((prev) => [...prev, aiResponse]);
-      }, 500);
-    }
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      text: input,
+      timestamp: getTimeString(),
+    };
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
+
+    setTimeout(() => {
+      const aiMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "ai",
+        text: "I understand your request. Let me process that and prepare a preview for you.",
+        timestamp: getTimeString(),
+        actionCard: {
+          title: "Extracted Table Data",
+          subtitle: "4 columns \u2022 12 rows \u2022 98% confidence",
+          icon: "table_chart",
+        },
+        actions: [
+          { label: "Preview", primary: true },
+          { label: "Dismiss" },
+        ],
+      };
+      setMessages((prev) => [...prev, aiMsg]);
+    }, 800);
   };
 
   return (
-    <div className="flex h-screen bg-surface-dim">
+    <div className="flex h-screen bg-[#d8dadc]">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0">
         <TopAppBar />
-        <main className="flex-1 overflow-y-auto bg-surface-bright flex flex-col p-md gap-lg">
-          <div className="flex justify-center">
-            <span className="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-sm py-xs rounded-full">
-              TODAY
-            </span>
-          </div>
 
-          <div className="flex-1 overflow-y-auto space-y-lg">
+        {/* Chat Messages */}
+        <main ref={scrollRef} className="flex-1 overflow-y-auto bg-[#f7f9fb] px-4 py-6">
+          <div className="max-w-2xl mx-auto flex flex-col gap-5">
+            {/* Date Marker */}
+            <div className="flex justify-center">
+              <span className="text-[10px] font-bold tracking-widest uppercase text-[#6f7a70] bg-[#eceef0] px-3 py-1 rounded-full">
+                Today
+              </span>
+            </div>
+
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} msg-enter`}
               >
-                <div
-                  className={`max-w-96 ${
-                    msg.role === "user"
-                      ? "bg-surface border border-outline-variant rounded-xl rounded-tr-none"
-                      : "bg-tertiary-fixed border-l-4 border-primary rounded-xl rounded-tl-none"
-                  } p-md shadow-sm`}
-                >
+                <div className={`max-w-[85%] ${msg.role === "user" ? "" : "flex gap-2.5"}`}>
+                  {/* AI Avatar */}
                   {msg.role === "ai" && (
-                    <div className="flex items-center gap-sm mb-md">
-                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                        <span
-                          className="material-symbols-outlined text-on-primary text-sm"
-                          style={{ fontVariationSettings: "'FILL' 1" }}
-                        >
-                          smart_toy
-                        </span>
-                      </div>
-                      <span className="font-label-caps text-label-caps text-primary">
-                        CODEX AI
+                    <div className="w-8 h-8 min-w-[32px] rounded-full bg-[#005931] flex items-center justify-center mt-1 shadow-sm">
+                      <span className="material-symbols-outlined text-white" style={{ fontSize: 16, fontVariationSettings: "'FILL' 1" }}>
+                        smart_toy
                       </span>
                     </div>
                   )}
-                  <p className="font-body-md text-body-md text-on-surface">
-                    {msg.text}
-                  </p>
+
+                  <div>
+                    {/* Message Bubble */}
+                    <div
+                      className={`rounded-2xl px-4 py-3 shadow-sm ${
+                        msg.role === "user"
+                          ? "bg-white border border-[#bfc9be] rounded-tr-md"
+                          : "bg-[#d5e3fc]/40 border-l-[3px] border-l-[#005931] rounded-tl-md"
+                      }`}
+                    >
+                      {msg.role === "ai" && (
+                        <div className="flex items-center gap-1.5 mb-2">
+                          <span className="text-[10px] font-bold tracking-widest uppercase text-[#005931]">
+                            Codex AI
+                          </span>
+                        </div>
+                      )}
+                      <p className="text-[14px] leading-relaxed text-[#191c1e]">{msg.text}</p>
+
+                      {/* Action Card */}
+                      {msg.actionCard && (
+                        <div className="mt-3 bg-white border border-[#bfc9be] rounded-xl p-3 flex items-center gap-3 shadow-sm">
+                          <div className="w-10 h-10 rounded-lg bg-[#eceef0] flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[#005931]" style={{ fontSize: 22 }}>
+                              {msg.actionCard.icon}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-[13px] font-semibold text-[#191c1e] truncate">{msg.actionCard.title}</p>
+                            <p className="text-[11px] text-[#6f7a70] truncate">{msg.actionCard.subtitle}</p>
+                          </div>
+                          <span className="material-symbols-outlined text-[#bfc9be]" style={{ fontSize: 18 }}>
+                            chevron_right
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Action Buttons */}
+                      {msg.actions && (
+                        <div className="flex gap-2 mt-3">
+                          {msg.actions.map((action) => (
+                            <button
+                              key={action.label}
+                              className={`text-[12px] font-semibold px-4 py-2 rounded-full transition-all ${
+                                action.primary
+                                  ? "bg-[#005931] text-white hover:bg-[#176c40] shadow-sm hover:shadow"
+                                  : "bg-transparent border border-[#6f7a70] text-[#005931] hover:bg-[#eceef0]"
+                              }`}
+                            >
+                              {action.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Timestamp */}
+                    <p className={`text-[10px] text-[#6f7a70] mt-1 ${msg.role === "user" ? "text-right pr-1" : "pl-1"}`}>
+                      {msg.timestamp}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </main>
 
-        <footer className="bg-surface border-t border-outline-variant p-md flex flex-col gap-sm z-10">
-          <div className="flex items-end bg-surface-container-lowest border border-outline-variant rounded-xl p-xs shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
-            <div className="flex flex-col w-full">
-              <textarea
-                className="w-full bg-transparent border-none outline-none resize-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant px-sm py-sm max-h-32 overflow-y-auto"
-                placeholder="Ask Codex..."
-                rows={1}
-                style={{ minHeight: "44px" }}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-              />
-              <div className="flex justify-between items-center px-xs pb-xs pt-xs">
-                <div className="flex items-center gap-xs">
-                  <button className="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container rounded transition-colors">
-                    <span className="material-symbols-outlined text-sm">
-                      image
-                    </span>
-                  </button>
-                  <button className="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container rounded transition-colors">
-                    <span className="material-symbols-outlined text-sm">
-                      link
-                    </span>
-                  </button>
-                  <button className="p-xs text-on-surface-variant hover:text-primary hover:bg-surface-container rounded transition-colors">
-                    <span className="material-symbols-outlined text-sm">
-                      border_all
+        {/* Input Area */}
+        <footer className="bg-white border-t border-[#bfc9be] px-4 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.04)]">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex items-end bg-[#f7f9fb] border border-[#bfc9be] rounded-2xl px-3 py-2 shadow-sm focus-within:border-[#005931] focus-within:ring-2 focus-within:ring-[#005931]/10 transition-all">
+              <div className="flex-1 flex flex-col">
+                <textarea
+                  className="w-full bg-transparent border-none outline-none resize-none text-[14px] text-[#191c1e] placeholder:text-[#6f7a70] px-1 py-1.5 max-h-32"
+                  placeholder="Describe the data you need, or paste a URL..."
+                  rows={1}
+                  style={{ minHeight: "40px" }}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                />
+                <div className="flex justify-between items-center pt-1 pb-0.5">
+                  <div className="flex items-center gap-0.5">
+                    {[
+                      { icon: "image", title: "Upload Image" },
+                      { icon: "link", title: "Paste URL" },
+                      { icon: "grid_on", title: "Select Data Range" },
+                    ].map((btn) => (
+                      <button
+                        key={btn.icon}
+                        title={btn.title}
+                        className="w-8 h-8 rounded-lg flex items-center justify-center text-[#6f7a70] hover:text-[#005931] hover:bg-[#e6e8ea] transition-colors"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+                          {btn.icon}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleSend}
+                    disabled={!input.trim()}
+                    className="w-9 h-9 rounded-xl bg-[#005931] text-white flex items-center justify-center hover:bg-[#176c40] transition-all shadow-sm disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-[#005931]"
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: 18, fontVariationSettings: "'FILL' 1" }}>
+                      send
                     </span>
                   </button>
                 </div>
-                <button
-                  onClick={handleSend}
-                  className="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center hover:bg-surface-tint transition-colors shadow-sm disabled:opacity-50"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  <span className="material-symbols-outlined text-sm">
-                    send
-                  </span>
-                </button>
               </div>
             </div>
-          </div>
-          <div className="text-center font-label-caps text-label-caps text-on-surface-variant opacity-75 px-md">
-            Codex AI can make mistakes. Verify important data.
+            <p className="text-center text-[10px] text-[#6f7a70] mt-2 opacity-60">
+              Codex AI can make mistakes. Always verify important data before committing to Excel.
+            </p>
           </div>
         </footer>
       </div>
