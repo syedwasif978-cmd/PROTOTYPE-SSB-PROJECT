@@ -1,22 +1,16 @@
 import "./globals.css";
-import { Fraunces, Sora } from "next/font/google";
+import { Inter } from "next/font/google";
 
-const sora = Sora({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap"
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-serif",
+  variable: "--font-inter",
   display: "swap"
 });
 
 export const metadata = {
-  title: "AI Excel Chatbot Prototype",
+  title: "Codex for Excel",
   description:
-    "A desktop-first, AI-powered Excel data entry and analysis chatbot prototype."
+    "AI-powered Excel data extraction, calculation, and visualization chatbot."
 };
 
 export default function RootLayout({
@@ -25,8 +19,101 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${sora.variable} ${fraunces.variable}`}>
+    <html lang="en" className="light">
+      <head>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <script id="tailwind-config">
+          {`tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                "colors": {
+                  "error-container": "#ffdad6",
+                  "on-primary": "#ffffff",
+                  "surface-container-lowest": "#ffffff",
+                  "on-secondary-fixed-variant": "#00497c",
+                  "primary-container": "#217346",
+                  "on-background": "#191c1e",
+                  "surface-bright": "#f7f9fb",
+                  "outline": "#6f7a70",
+                  "surface-container": "#eceef0",
+                  "on-surface": "#191c1e",
+                  "tertiary-fixed": "#d5e3fc",
+                  "inverse-surface": "#2d3133",
+                  "primary": "#005931",
+                  "tertiary-fixed-dim": "#b9c7df",
+                  "on-error-container": "#93000a",
+                  "surface-container-high": "#e6e8ea",
+                  "surface-container-highest": "#e0e3e5",
+                  "on-secondary-container": "#004a7d",
+                  "secondary-fixed-dim": "#9ecaff",
+                  "secondary": "#0b61a1",
+                  "primary-fixed": "#a3f4bc",
+                  "tertiary": "#404e62",
+                  "on-tertiary-container": "#d6e4fd",
+                  "inverse-primary": "#88d8a1",
+                  "on-secondary-fixed": "#001d36",
+                  "tertiary-container": "#58667b",
+                  "on-primary-container": "#a4f5bd",
+                  "outline-variant": "#bfc9be",
+                  "on-primary-fixed-variant": "#00522d",
+                  "surface": "#f7f9fb",
+                  "error": "#ba1a1a",
+                  "on-surface-variant": "#3f4941",
+                  "secondary-fixed": "#d1e4ff",
+                  "on-secondary": "#ffffff",
+                  "inverse-on-surface": "#eff1f3",
+                  "surface-variant": "#e0e3e5",
+                  "surface-tint": "#176c40",
+                  "background": "#f7f9fb",
+                  "secondary-container": "#7cbaff",
+                  "on-tertiary": "#ffffff",
+                  "on-error": "#ffffff",
+                  "on-primary-fixed": "#00210f",
+                  "on-tertiary-fixed-variant": "#3a485b",
+                  "surface-dim": "#d8dadc",
+                  "on-tertiary-fixed": "#0d1c2e",
+                  "surface-container-low": "#f2f4f6",
+                  "primary-fixed-dim": "#88d8a1"
+                },
+                "borderRadius": {
+                  "DEFAULT": "0.125rem",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+                },
+                "spacing": {
+                  "sm": "8px",
+                  "margin-safe": "20px",
+                  "md": "16px",
+                  "xs": "4px",
+                  "xl": "32px",
+                  "base": "4px",
+                  "lg": "24px",
+                  "gutter": "12px"
+                },
+                "fontFamily": {
+                  "code": ["Inter"],
+                  "body-md": ["Inter"],
+                  "body-sm": ["Inter"],
+                  "h2": ["Inter"],
+                  "h1": ["Inter"],
+                  "label-caps": ["Inter"]
+                },
+                "fontSize": {
+                  "code": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                  "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                  "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                  "h2": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                  "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                  "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                }
+              }
+            }
+          }`}
+        </script>
+      </head>
+      <body className={inter.variable}>
         {children}
       </body>
     </html>
